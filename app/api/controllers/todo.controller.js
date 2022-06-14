@@ -10,6 +10,10 @@ module.exports = {
          if (err){
           next(err);
          } else{
+            console.log("Todo ",todos);
+            if(todos.length < 1) {
+                return res.status(400).json({status: "Error", message: "No List Found ! Please add todo :-)", data: null});  
+            }
           for (let todo of todos) {
             todoList.push({id: todo._id, content: todo.content, date: todo.date});
           }
