@@ -1,6 +1,7 @@
 const express = require('express');
 const logger = require('morgan');
 const users = require('./app/api/routes/users');
+const todo = require('./app/api/routes/todo')
 const bodyParser = require('body-parser');
 const mongoose = require('./app/api/config/database'); 
 var jwt = require('jsonwebtoken');
@@ -15,8 +16,9 @@ res.json({"tutorial" : "Build REST API with node.js"});
 });
 
 app.use('/users', users);
+app.use('/todo',  todo);
 function validateUser(req, res, next) {
-  jwt.verify(req.headers['x-access-token'], req.app.get('secretKey'), function(err, decoded) {
+  jwt.verify(req.headers['access_token'], req.app.get('secretKey'), function(err, decoded) {
     if (err) {
       res.json({status:"error", message: err.message, data:null});
     }else{
