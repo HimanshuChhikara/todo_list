@@ -2,6 +2,9 @@ const todoModel = require('../models/todo');
 
 module.exports = {
     getAll: function(req, res, next) {
+        if(!req.headers.access_token) {
+         return res.status(400).json({status: "Error", message: "Token Missing", data: null});  
+        }
         let todoList = [];
         todoModel.find({}, function(err, todos){
          if (err){
@@ -11,11 +14,13 @@ module.exports = {
             todoList.push({id: todo._id, content: todo.content, date: todo.date});
           }
           res.status(200).json({status:"success", message: "Todo list found!!!", data:{todos : todoList}});
-             
          }
       });
     },
     create: async function(req,res,next) {
+        if(!req.headers.access_token) {
+            return res.status(400).json({status: "Error", message: "Token Missing", data: null});  
+        }
         todoModel.create({content: req.body.content, date: req.body.date }, function (err, result) {
             if (err) 
              next(err);
@@ -25,6 +30,9 @@ module.exports = {
        },
 
     updateById: function(req, res, next) {
+        if(!req.headers.access_token) {
+            return res.status(400).json({status: "Error", message: "Token Missing", data: null});  
+        }
         todoModel.findByIdAndUpdate(req.headers.id,{content:req.body.content}, function(err, todoInfo){
       if(err)
           next(err);
@@ -40,6 +48,9 @@ module.exports = {
        },
 
        deleteById: function(req, res, next) {
+        if(!req.headers.access_token) {
+            return res.status(400).json({status: "Error", message: "Token Missing", data: null});  
+        }
         todoModel.findByIdAndRemove(req.headers.id, function(err, todoInfo){
          if(err)
           next(err);
